@@ -16,6 +16,7 @@ import java.util.Date;
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
+    // TODO: This should be loaded from a secure configuration server or environment variables
     @Value("${rent.your.room.jwtSecret}")
     private String jwtSecret;
 

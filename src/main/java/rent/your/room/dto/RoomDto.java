@@ -8,6 +8,7 @@ import java.util.Set;
 public class RoomDto {
     private Long id;
     private String title;
+    private String roomType;
     private String description;
     private BigDecimal rent;
     private String imageUrl;

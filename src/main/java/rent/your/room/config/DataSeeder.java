@@ -49,53 +49,53 @@ public class DataSeeder implements CommandLineRunner {
             User admin = new User("admin", "admin@example.com", passwordEncoder.encode("password"));
             admin.setRoles(Set.of(adminRole));
             userRepository.save(admin);
-        }
 
-        if (amenityRepository.count() == 0) {
-            amenityRepository.save(new Amenity("WiFi"));
-            amenityRepository.save(new Amenity("Air Conditioning"));
-            amenityRepository.save(new Amenity("Parking"));
-            amenityRepository.save(new Amenity("Kitchen"));
-        }
+            if (amenityRepository.count() == 0) {
+                amenityRepository.save(new Amenity("WiFi"));
+                amenityRepository.save(new Amenity("Air Conditioning"));
+                amenityRepository.save(new Amenity("Parking"));
+                amenityRepository.save(new Amenity("Kitchen"));
+            }
 
-        if (roomRepository.count() == 0) {
-            User user = userRepository.findByUsername("user").get();
-            Amenity wifi = amenityRepository.findAll().get(0);
-            Amenity ac = amenityRepository.findAll().get(1);
+            if (roomRepository.count() == 0) {
+                User savedUser = userRepository.findByUsername("user").get();
+                Amenity wifi = amenityRepository.findAll().get(0);
+                Amenity ac = amenityRepository.findAll().get(1);
 
-            Address address1 = new Address();
-            address1.setStreet("123 Main St");
-            address1.setCity("Anytown");
-            address1.setState("CA");
-            address1.setZipCode("12345");
-            address1.setCountry("USA");
+                Address address1 = new Address();
+                address1.setStreet("123 Main St");
+                address1.setCity("Anytown");
+                address1.setState("CA");
+                address1.setZipCode("12345");
+                address1.setCountry("USA");
 
-            Room room1 = new Room();
-            room1.setTitle("Cozy Room in Downtown");
-            room1.setDescription("A nice and cozy room in the heart of the city.");
-            room1.setRent(new BigDecimal("1200.00"));
-            room1.setOwner(user);
-            room1.setAddress(address1);
-            room1.setAmenities(Set.of(wifi, ac));
-            room1.setApproved(true);
-            roomRepository.save(room1);
+                Room room1 = new Room();
+                room1.setTitle("Cozy Room in Downtown");
+                room1.setDescription("A nice and cozy room in the heart of the city.");
+                room1.setRent(new BigDecimal("1200.00"));
+                room1.setOwner(savedUser);
+                room1.setAddress(address1);
+                room1.setAmenities(Set.of(wifi, ac));
+                room1.setApproved(true);
+                roomRepository.save(room1);
 
-            Address address2 = new Address();
-            address2.setStreet("456 Oak Ave");
-            address2.setCity("Someville");
-            address2.setState("NY");
-            address2.setZipCode("54321");
-            address2.setCountry("USA");
+                Address address2 = new Address();
+                address2.setStreet("456 Oak Ave");
+                address2.setCity("Someville");
+                address2.setState("NY");
+                address2.setZipCode("54321");
+                address2.setCountry("USA");
 
-            Room room2 = new Room();
-            room2.setTitle("Spacious Room with a View");
-            room2.setDescription("A large room with a beautiful view of the park.");
-            room2.setRent(new BigDecimal("1500.00"));
-            room2.setOwner(user);
-            room2.setAddress(address2);
-            room2.setAmenities(Set.of(wifi));
-            room2.setApproved(false); // This one is pending approval
-            roomRepository.save(room2);
+                Room room2 = new Room();
+                room2.setTitle("Spacious Room with a View");
+                room2.setDescription("A large room with a beautiful view of the park.");
+                room2.setRent(new BigDecimal("1500.00"));
+                room2.setOwner(savedUser);
+                room2.setAddress(address2);
+                room2.setAmenities(Set.of(wifi));
+                room2.setApproved(false); // This one is pending approval
+                roomRepository.save(room2);
+            }
         }
     }
 }

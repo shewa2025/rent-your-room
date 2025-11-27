@@ -120,26 +120,43 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    @PostMapping("/refreshtoken")
-    public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
-        String requestRefreshToken = request.getRefreshToken();
 
-        return refreshTokenService.findByToken(requestRefreshToken)
-                .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getUser)
-                .map(user -> {
-                    String token = jwtUtils.generateTokenFromUsername(user.getUsername());
-                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
-                })
-                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
-                        "Refresh token is not in database!"));
-    }
 
-    @PostMapping("/logout")
+@PostMapping("/refreshtoken")
+
+public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+
+    String requestRefreshToken = request.getRefreshToken();
+
+
+
+    return refreshTokenService.findByToken(requestRefreshToken)
+
+            .map(refreshToken -> {
+
+                refreshTokenService.verifyExpiration(refreshToken);
+
+                User user = refreshToken.getUser();
+
+                String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+
+                return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+
+            })
+
+            .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
+
+                    "Refresh token is not in database!"));
+
+}
+
+    @PostMapping("/signout")
     public ResponseEntity<?> logoutUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = userDetails.getId();
-        refreshTokenService.deleteByUserId(userId);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetailsImpl) {
+            Long userId = ((UserDetailsImpl) principal).getId();
+            refreshTokenService.deleteByUserId(userId);
+        }
         return ResponseEntity.ok(new MessageResponse("Log out successful!"));
     }
 }

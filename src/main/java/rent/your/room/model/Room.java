@@ -26,6 +26,9 @@ public class Room {
     private String title;
 
     @NotBlank
+    private String roomType;
+
+    @NotBlank
     private String description;
 
     @NotNull
