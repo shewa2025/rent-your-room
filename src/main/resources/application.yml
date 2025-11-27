@@ -3,7 +3,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/rent-your-room
     username: postgres
-    password: password
+    password: admin
   jpa:
     hibernate:
       ddl-auto: update
