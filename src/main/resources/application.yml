@@ -2,7 +2,7 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/rent-your-room
-    username: user
+    username: postgres
     password: password
   jpa:
     hibernate:
