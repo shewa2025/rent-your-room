@@ -31,17 +31,20 @@ public class RefreshTokenService {
 
     @Transactional
     public RefreshToken createRefreshToken(Long userId) {
-        // Delete existing token if it exists
-        refreshTokenRepository.findByUserId(userId).ifPresent(refreshTokenRepository::delete);
+        Optional<RefreshToken> existingToken = refreshTokenRepository.findByUserId(userId);
 
-        RefreshToken refreshToken = new RefreshToken();
-
-        refreshToken.setUser(userRepository.findById(userId).get());
-        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
-        refreshToken.setToken(UUID.randomUUID().toString());
-
-        refreshToken = refreshTokenRepository.save(refreshToken);
-        return refreshToken;
+        if (existingToken.isPresent()) {
+            RefreshToken refreshToken = existingToken.get();
+            refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
+            refreshToken.setToken(UUID.randomUUID().toString());
+            return refreshTokenRepository.save(refreshToken);
+        } else {
+            RefreshToken refreshToken = new RefreshToken();
+            refreshToken.setUser(userRepository.findById(userId).get());
+            refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
+            refreshToken.setToken(UUID.randomUUID().toString());
+            return refreshTokenRepository.save(refreshToken);
+        }
     }
 
     public RefreshToken verifyExpiration(RefreshToken refreshToken) {
