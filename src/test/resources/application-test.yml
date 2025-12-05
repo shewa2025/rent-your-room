@@ -9,7 +9,7 @@ spring:
 rent:
   your:
     room:
-      jwtSecret: bezKoderSecretKey
+      jwtSecret: Wh96WruQh+Ffvmf8dUDMMFCJHJ2+uJDnlZ/m2kcMtdw=
       jwtExpirationMs: 86400000
       app:
         jwtRefreshExpirationMs: 604800000

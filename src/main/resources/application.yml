@@ -1,9 +1,9 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/rent-your-room
+    url: jdbc:postgresql://localhost:5433/rent_your_room_db
     username: postgres
-    password: admin
+    password: BOBY@mechal1
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,7 +17,7 @@ spring:
 rent:
   your:
     room:
-      jwtSecret: bezKoderSecretKey
+      jwtSecret: Wh96WruQh+Ffvmf8dUDMMFCJHJ2+uJDnlZ/m2kcMtdw=
       jwtExpirationMs: 86400000
       app:
         jwtRefreshExpirationMs: 604800000
