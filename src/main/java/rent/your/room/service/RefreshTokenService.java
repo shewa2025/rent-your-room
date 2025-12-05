@@ -29,6 +29,7 @@ public class RefreshTokenService {
         return refreshTokenRepository.findByToken(token);
     }
 
+    @Transactional
     public RefreshToken createRefreshToken(Long userId) {
         // Delete existing token if it exists
         refreshTokenRepository.findByUserId(userId).ifPresent(refreshTokenRepository::delete);
