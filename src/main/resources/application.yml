@@ -19,5 +19,6 @@ rent:
     room:
       jwtSecret: bezKoderSecretKey
       jwtExpirationMs: 86400000
-      jwtRefreshExpirationMs: 604800000
+      app:
+        jwtRefreshExpirationMs: 604800000
 

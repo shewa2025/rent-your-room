@@ -71,6 +71,7 @@ public class DataSeeder implements CommandLineRunner {
 
                 Room room1 = new Room();
                 room1.setTitle("Cozy Room in Downtown");
+                room1.setRoomType("Apartment");
                 room1.setDescription("A nice and cozy room in the heart of the city.");
                 room1.setRent(new BigDecimal("1200.00"));
                 room1.setOwner(savedUser);
@@ -88,6 +89,7 @@ public class DataSeeder implements CommandLineRunner {
 
                 Room room2 = new Room();
                 room2.setTitle("Spacious Room with a View");
+                room2.setRoomType("Private Room");
                 room2.setDescription("A large room with a beautiful view of the park.");
                 room2.setRent(new BigDecimal("1500.00"));
                 room2.setOwner(savedUser);
