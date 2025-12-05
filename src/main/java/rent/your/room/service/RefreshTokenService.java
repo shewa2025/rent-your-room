@@ -30,6 +30,9 @@ public class RefreshTokenService {
     }
 
     public RefreshToken createRefreshToken(Long userId) {
+        // Delete existing token if it exists
+        refreshTokenRepository.findByUserId(userId).ifPresent(refreshTokenRepository::delete);
+
         RefreshToken refreshToken = new RefreshToken();
 
         refreshToken.setUser(userRepository.findById(userId).get());
