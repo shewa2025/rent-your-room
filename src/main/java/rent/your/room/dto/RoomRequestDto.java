@@ -20,8 +20,6 @@ public class RoomRequestDto {
     @DecimalMin("0.0")
     private BigDecimal rent;
 
-    private String imageUrl;
-
     @NotNull
     private AddressDto address;
 

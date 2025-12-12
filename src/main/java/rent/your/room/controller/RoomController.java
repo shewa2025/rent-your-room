@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import rent.your.room.dto.RoomDto;
 import rent.your.room.dto.RoomRequestDto;
 import rent.your.room.service.RoomService;
@@ -23,10 +24,13 @@ public class RoomController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<RoomDto> createRoom(@Valid @RequestBody RoomRequestDto roomRequestDto) {
+    public ResponseEntity<RoomDto> createRoom(
+            @Valid @RequestPart("room") RoomRequestDto roomRequestDto,
+            @RequestParam("image") MultipartFile image
+    ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        RoomDto createdRoom = roomService.createRoom(roomRequestDto, username);
+        RoomDto createdRoom = roomService.createRoom(roomRequestDto, username, image);
         return ResponseEntity.ok(createdRoom);
     }
 
@@ -41,10 +45,14 @@ public class RoomController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<RoomDto> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomRequestDto roomRequestDto) {
+    public ResponseEntity<RoomDto> updateRoom(
+            @PathVariable Long id,
+            @Valid @RequestPart("room") RoomRequestDto roomRequestDto,
+            @RequestParam("image") MultipartFile image
+    ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        RoomDto updatedRoom = roomService.updateRoom(id, roomRequestDto, username);
+        RoomDto updatedRoom = roomService.updateRoom(id, roomRequestDto, username, image);
         return ResponseEntity.ok(updatedRoom);
     }
 

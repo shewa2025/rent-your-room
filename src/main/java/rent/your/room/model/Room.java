@@ -35,7 +35,9 @@ public class Room {
     @DecimalMin("0.0")
     private BigDecimal rent;
 
-    private String imageUrl;
+    @Lob
+    @Column(columnDefinition = "bytea")
+    private byte[] image;
 
     private boolean approved = false;
 

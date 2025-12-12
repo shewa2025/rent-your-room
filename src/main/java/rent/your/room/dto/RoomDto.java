@@ -11,7 +11,7 @@ public class RoomDto {
     private String title;
     private String description;
     private BigDecimal rent;
-    private String imageUrl;
+    private byte[] image;
     private boolean approved;
     private String ownerUsername;
     private AddressDto address;

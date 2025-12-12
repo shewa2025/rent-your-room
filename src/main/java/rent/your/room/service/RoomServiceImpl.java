@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import rent.your.room.dto.AddressDto;
 import rent.your.room.dto.AmenityDto;
 import rent.your.room.dto.RoomDto;
@@ -15,6 +16,7 @@ import rent.your.room.repository.AmenityRepository;
 import rent.your.room.repository.RoomRepository;
 import rent.your.room.repository.UserRepository;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,7 +35,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public RoomDto createRoom(RoomRequestDto roomRequestDto, String username) {
+    public RoomDto createRoom(RoomRequestDto roomRequestDto, String username, MultipartFile image) {
         User owner = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -56,7 +58,11 @@ public class RoomServiceImpl implements RoomService {
         room.setTitle(roomRequestDto.getTitle());
         room.setDescription(roomRequestDto.getDescription());
         room.setRent(roomRequestDto.getRent());
-        room.setImageUrl(roomRequestDto.getImageUrl());
+        try {
+            room.setImage(image.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException("Could not store the image. Error: " + e.getMessage());
+        }
         room.setOwner(owner);
         room.setAddress(address);
         room.setAmenities(amenities);
@@ -112,7 +118,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public RoomDto updateRoom(Long id, RoomRequestDto roomRequestDto, String username) {
+    public RoomDto updateRoom(Long id, RoomRequestDto roomRequestDto, String username, MultipartFile image) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
 
@@ -126,7 +132,14 @@ public class RoomServiceImpl implements RoomService {
         room.setTitle(roomRequestDto.getTitle());
         room.setDescription(roomRequestDto.getDescription());
         room.setRent(roomRequestDto.getRent());
-        room.setImageUrl(roomRequestDto.getImageUrl());
+
+        if (image != null && !image.isEmpty()) {
+            try {
+                room.setImage(image.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException("Could not store the image. Error: " + e.getMessage());
+            }
+        }
 
         Address address = room.getAddress();
         address.setStreet(roomRequestDto.getAddress().getStreet());
@@ -169,7 +182,7 @@ public class RoomServiceImpl implements RoomService {
         roomDto.setTitle(room.getTitle());
         roomDto.setDescription(room.getDescription());
         roomDto.setRent(room.getRent());
-        roomDto.setImageUrl(room.getImageUrl());
+        roomDto.setImage(room.getImage());
         roomDto.setApproved(room.isApproved());
         roomDto.setOwnerUsername(room.getOwner().getUsername());
 
