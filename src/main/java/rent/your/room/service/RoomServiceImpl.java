@@ -11,6 +11,7 @@ import rent.your.room.dto.AddressDto;
 import rent.your.room.dto.AmenityDto;
 import rent.your.room.dto.RoomDto;
 import rent.your.room.dto.RoomRequestDto;
+import rent.your.room.dto.ReviewDto;
 import rent.your.room.model.*;
 import rent.your.room.repository.AmenityRepository;
 import rent.your.room.repository.RoomRepository;
@@ -203,6 +204,16 @@ public class RoomServiceImpl implements RoomService {
                 amenityDto.setName(amenity.getName());
                 return amenityDto;
             }).collect(Collectors.toSet()));
+        }
+        if (room.getReviews() != null) {
+            roomDto.setReviews(room.getReviews().stream().map(review -> {
+                ReviewDto reviewDto = new ReviewDto();
+                reviewDto.setId(review.getId());
+                reviewDto.setComment(review.getComment());
+                reviewDto.setRating(review.getRating());
+                reviewDto.setUsername(review.getUser().getUsername());
+                return reviewDto;
+            }).collect(Collectors.toList()));
         }
         return roomDto;
     }

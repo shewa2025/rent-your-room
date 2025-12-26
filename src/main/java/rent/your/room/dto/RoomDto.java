@@ -3,6 +3,7 @@ package rent.your.room.dto;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -16,4 +17,5 @@ public class RoomDto {
     private String ownerUsername;
     private AddressDto address;
     private Set<AmenityDto> amenities;
+    private List<ReviewDto> reviews;
 }
