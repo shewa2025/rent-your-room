@@ -14,6 +14,7 @@ public interface RoomService {
     Page<RoomDto> getRoomsByOwner(String username, Pageable pageable);
     Page<RoomDto> getPendingRooms(Pageable pageable);
     RoomDto approveRoom(Long id);
+    RoomDto rejectRoom(Long id);
     RoomDto updateRoom(Long id, RoomRequestDto roomRequestDto, String username, MultipartFile image);
     void deleteRoom(Long id, String username);
 }

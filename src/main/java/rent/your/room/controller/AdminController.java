@@ -29,4 +29,10 @@ public class AdminController {
         RoomDto approvedRoom = roomService.approveRoom(id);
         return ResponseEntity.ok(approvedRoom);
     }
+
+    @PutMapping("/rooms/{id}/reject")
+    public ResponseEntity<RoomDto> rejectRoom(@PathVariable Long id) {
+        RoomDto rejectedRoom = roomService.rejectRoom(id);
+        return ResponseEntity.ok(rejectedRoom);
+    }
 }

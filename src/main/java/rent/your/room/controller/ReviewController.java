@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import rent.your.room.dto.ReviewDto;
+import rent.your.room.dto.ReviewRequestDto;
 import rent.your.room.model.Review;
 import rent.your.room.service.ReviewService;
 import rent.your.room.service.UserService;
@@ -23,10 +25,9 @@ public class ReviewController {
     }
 
     @PostMapping
-    public Review addReview(@RequestBody Review review) {
+    public ReviewDto addReview(@RequestBody ReviewRequestDto reviewRequestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        review.setUser(userService.findByUsername(username));
-        return reviewService.addReview(review);
+        return reviewService.addReview(reviewRequestDto, username);
     }
 }

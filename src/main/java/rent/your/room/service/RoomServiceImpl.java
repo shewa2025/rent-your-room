@@ -119,6 +119,16 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
+    public RoomDto rejectRoom(Long id) {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+        room.setApproved(false);
+        Room updatedRoom = roomRepository.save(room);
+        return convertToDto(updatedRoom);
+    }
+
+    @Override
+    @Transactional
     public RoomDto updateRoom(Long id, RoomRequestDto roomRequestDto, String username, MultipartFile image) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
