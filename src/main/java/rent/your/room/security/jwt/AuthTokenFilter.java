@@ -1,4 +1,3 @@
-package rent.your.room.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,11 +10,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import rent.your.room.security.services.UserDetailsServiceImpl;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
@@ -25,6 +27,33 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private UserDetailsServiceImpl userDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+
+    private static final List<String> EXCLUDE_URLS = Arrays.asList(
+            "/api/auth/**",
+            "/api/public/**",
+            "/api/rooms", // GET and POST
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    );
+
+    private AntPathMatcher pathMatcher = new AntPathMatcher();
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        for (String excludeUrl : EXCLUDE_URLS) {
+            if (pathMatcher.match(excludeUrl, path)) {
+                // Special handling for /api/rooms: only exclude GET and POST
+                if (excludeUrl.equals("/api/rooms")) {
+                    String method = request.getMethod();
+                    return method.equals("GET") || method.equals("POST");
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -61,3 +90,4 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         return null;
     }
 }
+
