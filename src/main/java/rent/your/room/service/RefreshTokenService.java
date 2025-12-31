@@ -8,6 +8,7 @@ import rent.your.room.exception.TokenRefreshException;
 import rent.your.room.model.RefreshToken;
 import rent.your.room.repository.RefreshTokenRepository;
 import rent.your.room.repository.UserRepository;
+import rent.your.room.model.User;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -40,7 +41,9 @@ public class RefreshTokenService {
             return refreshTokenRepository.save(refreshToken);
         } else {
             RefreshToken refreshToken = new RefreshToken();
-            refreshToken.setUser(userRepository.findById(userId).get());
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found for ID: " + userId));
+            refreshToken.setUser(user);
             refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
             refreshToken.setToken(UUID.randomUUID().toString());
             return refreshTokenRepository.save(refreshToken);

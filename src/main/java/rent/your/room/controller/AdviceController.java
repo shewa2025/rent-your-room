@@ -14,7 +14,7 @@ import java.util.Date;
 public class AdviceController {
 
     @ExceptionHandler(value = TokenRefreshException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public MessageResponse handleTokenRefreshException(TokenRefreshException ex, WebRequest request) {
         return new MessageResponse(
                 HttpStatus.FORBIDDEN.value(),

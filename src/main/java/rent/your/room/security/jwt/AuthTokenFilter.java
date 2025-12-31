@@ -1,3 +1,4 @@
+package rent.your.room.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -47,7 +48,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 // Special handling for /api/rooms: only exclude GET and POST
                 if (excludeUrl.equals("/api/rooms")) {
                     String method = request.getMethod();
-                    return method.equals("GET") || method.equals("POST");
+                    return method.equals("GET");
                 }
                 return true;
             }
@@ -83,11 +84,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ") && headerAuth.length() > 7) {
             return headerAuth.substring(7);
         }
 
         return null;
     }
 }
-
